@@ -16,6 +16,7 @@ class NotesAdapter (private var notes: List<Note>,context: Context) :
     RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
         private val db: NotesDatabaseHelper= NotesDatabaseHelper(context)
+        private var filteredNotes: List<Note> = notes
 
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
@@ -36,13 +37,13 @@ class NotesAdapter (private var notes: List<Note>,context: Context) :
 
     }
 
-    override fun getItemCount(): Int =notes.size
+    override fun getItemCount(): Int = filteredNotes.size
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        val note = notes[position]
+        val note = filteredNotes[position]
         holder.titleTextView.text = note.title
         holder.contentTextView.text = note.content
-        holder.noteCheckBox.isChecked = note.isChecked
+
 
 
 
@@ -59,25 +60,33 @@ class NotesAdapter (private var notes: List<Note>,context: Context) :
             Toast.makeText(holder.itemView.context, "Note deleted ", Toast.LENGTH_SHORT).show()
         }
 
-
-
-
-
+        holder.noteCheckBox.setOnCheckedChangeListener(null) // Remove the listener before setting the state
+        holder.noteCheckBox.isChecked = note.isChecked
         holder.noteCheckBox.setOnCheckedChangeListener { _, isChecked ->
             note.isChecked = isChecked
             db.updateNote(note) // Save the state of checkbox in the database
-
-
         }
 
 
     }
 
+
     fun refreshData(newNotes: List<Note>){
         notes = newNotes
-        notifyDataSetChanged()
+        filter("")
     }
 
+    fun filter(query: String) {
+        filteredNotes = if (query.isEmpty()) {
+            notes
+        } else {
+            notes.filter {
+                it.title.contains(query, ignoreCase = true) ||
+                        it.content.contains(query, ignoreCase = true)
+            }
+        }
+        notifyDataSetChanged()
 
+    }
 
 }

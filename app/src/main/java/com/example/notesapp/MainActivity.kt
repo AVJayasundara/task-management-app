@@ -35,6 +35,17 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                notesAdapter.filter(newText.orEmpty())
+                return true
+            }
+        })
+
     }
 
     override fun onResume() {

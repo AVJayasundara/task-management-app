@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+
     <TextView
         android:id="@+id/notesHeading"
         android:layout_width="wrap_content"
@@ -18,12 +20,23 @@
         android:textColor="@color/green"
         android:textSize="24sp"/>
 
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notesHeading"
+        android:layout_marginTop="16dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search notes..." />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        android:padding="16dp"/>
+        android:layout_marginTop="20dp"
+        android:padding="16dp"
+        android:layout_below="@+id/searchView"/>
 
 
 
